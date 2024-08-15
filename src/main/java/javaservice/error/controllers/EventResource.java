@@ -22,6 +22,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -102,6 +103,7 @@ public class EventResource {
             @ApiResponse(responseCode = "200", description = "Событие обновлено", content = @Content(schema = @Schema(implementation = Event.class))),
             @ApiResponse(responseCode = "400", description = "Событие не существует", content = @Content(schema = @Schema(implementation = Message.class)))
     })
+    @PreAuthorize("isAuthenticated()")
     @PutMapping("{id}")
     public Event updateEvent(@RequestBody Event event, @PathVariable Long id){
         log.info("Update event");
@@ -113,6 +115,7 @@ public class EventResource {
             @ApiResponse(responseCode = "200", description = "Событие удалено", content = @Content(schema = @Schema(implementation = Message.class))),
             @ApiResponse(responseCode = "400", description = "Событие не существует", content = @Content(schema = @Schema(implementation = Message.class)))
     })
+    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteEvent(@PathVariable(name = "id") Long id){
         log.info("Delete event");

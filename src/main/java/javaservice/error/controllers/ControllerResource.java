@@ -20,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -88,6 +89,7 @@ public class ControllerResource {
             @ApiResponse(responseCode = "200", description = "Контроллер создан", content = @Content(schema = @Schema(implementation = Controller.class))),
             @ApiResponse(responseCode = "400", description = "Контроллер уже существует", content = @Content(schema = @Schema(implementation = Message.class)))
     })
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("")
     public Controller createController(@RequestBody Controller controller){
         log.info("Create new controller");
@@ -98,6 +100,7 @@ public class ControllerResource {
             @ApiResponse(responseCode = "200", description = "Контроллер обновлен", content = @Content(schema = @Schema(implementation = Controller.class))),
             @ApiResponse(responseCode = "400", description = "Контроллер не существует", content = @Content(schema = @Schema(implementation = Message.class)))
     })
+    @PreAuthorize("isAuthenticated()")
     @PutMapping("/{id}")
     public Controller updateController(@RequestBody Controller controller, @PathVariable Long id){
         log.info("Update controller");
@@ -109,6 +112,7 @@ public class ControllerResource {
             @ApiResponse(responseCode = "200", description = "Контроллер удален", content = @Content(schema = @Schema(implementation = Message.class))),
             @ApiResponse(responseCode = "400", description = "Контроллер не существует", content = @Content(schema = @Schema(implementation = Message.class)))
     })
+    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteController(@PathVariable(name = "id") Long id){
         log.info("Delete controller");
