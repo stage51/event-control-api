@@ -41,7 +41,7 @@ public class ControllerResource {
     public void setControllerService(ControllerService controllerService) {
         this.controllerService = controllerService;
     }
-    @Operation(summary = "Получить все контроллеры", description = "Возвращает список всех устройств-контроллеров")
+    @Operation(summary = "Получить все контроллеры постранично", description = "Возвращает список всех устройств-контроллеров, отсортированные по какому-либо полю по возрастанию или убыванию")
     @ApiResponse(responseCode = "200", description = "Успешное выполнение", content = @Content(schema = @Schema(implementation = Page.class)))
     @GetMapping("")
     public Page<Controller> getAllControllers(

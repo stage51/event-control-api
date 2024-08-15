@@ -42,7 +42,7 @@ public class EventTypeResource {
         this.eventTypeService = eventTypeService;
     }
 
-    @Operation(summary = "Генерация типов событий", description = "Генерирует новые типы событий устройств-контроллеров")
+    @Operation(summary = "Генерация типов событий постранично", description = "Генерирует новые типы событий устройств-контроллеров, отсортированные по какому-либо полю по возрастанию или убыванию\"")
     @ApiResponse(responseCode = "200", description = "Типы событий успешно сгенерированы", content = @Content(schema = @Schema(implementation = Message.class)))
     @GetMapping("/generate")
     public ResponseEntity<?> generateEventTypes(){

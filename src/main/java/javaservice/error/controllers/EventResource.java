@@ -45,7 +45,7 @@ public class EventResource {
     public void setEventService(EventService eventService) {
         this.eventService = eventService;
     }
-    @Operation(summary = "Получить все события", description = "Возвращает список всех событий устройств-контроллеров")
+    @Operation(summary = "Получить все события постранично", description = "Возвращает страницу всех событий устройств-контроллеров, отсортированные по какому-либо полю по возрастанию или убыванию, или получить события по названию типа события, серийному номеру контроллера или комменту события")
     @ApiResponse(responseCode = "200", description = "Успешное выполнение", content = @Content(schema = @Schema(implementation = Page.class)))
     @GetMapping("")
     public Page<Event> getAllEvents(
@@ -123,10 +123,13 @@ public class EventResource {
             return new ResponseEntity<>(new Message(HttpStatus.BAD_REQUEST.value(), "Event doesn't exist"), HttpStatus.BAD_REQUEST);
         }
     }
+    @Operation(summary = "Получить события по времени", description = "Возвращает список всех событий с заданным промежутком времени")
+    @ApiResponse(responseCode = "200", description = "Успешное выполнение", content = @Content(schema = @Schema(implementation = List.class)))
     @GetMapping("/statistics")
     public List<Event> getStatistics(
             @RequestParam("start") String start,
             @RequestParam("end") String end) {
+        log.info("Get statistics");
         LocalDateTime startDateTime = LocalDateTime.parse(start, DATE_TIME_FORMATTER);
         LocalDateTime endDateTime = LocalDateTime.parse(end, DATE_TIME_FORMATTER);
         return eventService.getEventsBetween(startDateTime, endDateTime);
