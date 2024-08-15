@@ -87,9 +87,9 @@ public class ControllerResource {
     @Operation(summary = "Создать новый контроллер", description = "Добавляет новое устройство-контроллер в систему")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Контроллер создан", content = @Content(schema = @Schema(implementation = Controller.class))),
-            @ApiResponse(responseCode = "400", description = "Контроллер уже существует", content = @Content(schema = @Schema(implementation = Message.class)))
+            @ApiResponse(responseCode = "400", description = "Контроллер уже существует", content = @Content(schema = @Schema(implementation = Message.class))),
+            @ApiResponse(responseCode = "401", description = "Не авторизован", content = @Content(schema = @Schema(implementation = Message.class)))
     })
-    @PreAuthorize("isAuthenticated()")
     @PostMapping("")
     public Controller createController(@RequestBody Controller controller){
         log.info("Create new controller");
@@ -98,9 +98,9 @@ public class ControllerResource {
     @Operation(summary = "Обновить существующий контроллер", description = "Обновляет информацию об устройстве-контроллере")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Контроллер обновлен", content = @Content(schema = @Schema(implementation = Controller.class))),
-            @ApiResponse(responseCode = "400", description = "Контроллер не существует", content = @Content(schema = @Schema(implementation = Message.class)))
+            @ApiResponse(responseCode = "400", description = "Контроллер не существует", content = @Content(schema = @Schema(implementation = Message.class))),
+            @ApiResponse(responseCode = "401", description = "Не авторизован", content = @Content(schema = @Schema(implementation = Message.class)))
     })
-    @PreAuthorize("isAuthenticated()")
     @PutMapping("/{id}")
     public Controller updateController(@RequestBody Controller controller, @PathVariable Long id){
         log.info("Update controller");
@@ -110,9 +110,9 @@ public class ControllerResource {
     @Operation(summary = "Удалить контроллер по ID", description = "Удаляет устройство-контроллер по заданному ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Контроллер удален", content = @Content(schema = @Schema(implementation = Message.class))),
-            @ApiResponse(responseCode = "400", description = "Контроллер не существует", content = @Content(schema = @Schema(implementation = Message.class)))
+            @ApiResponse(responseCode = "404", description = "Контроллер не существует", content = @Content(schema = @Schema(implementation = Message.class))),
+            @ApiResponse(responseCode = "401", description = "Не авторизован", content = @Content(schema = @Schema(implementation = Message.class)))
     })
-    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteController(@PathVariable(name = "id") Long id){
         log.info("Delete controller");

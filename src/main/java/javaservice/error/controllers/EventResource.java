@@ -101,9 +101,9 @@ public class EventResource {
     @Operation(summary = "Обновить существующее событие", description = "Обновляет информацию о событии устройства-контроллера")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Событие обновлено", content = @Content(schema = @Schema(implementation = Event.class))),
-            @ApiResponse(responseCode = "400", description = "Событие не существует", content = @Content(schema = @Schema(implementation = Message.class)))
+            @ApiResponse(responseCode = "404", description = "Событие не существует", content = @Content(schema = @Schema(implementation = Message.class))),
+            @ApiResponse(responseCode = "401", description = "Не авторизован", content = @Content(schema = @Schema(implementation = Message.class)))
     })
-    @PreAuthorize("isAuthenticated()")
     @PutMapping("{id}")
     public Event updateEvent(@RequestBody Event event, @PathVariable Long id){
         log.info("Update event");
@@ -113,9 +113,9 @@ public class EventResource {
     @Operation(summary = "Удалить событие по ID", description = "Удаляет событие устройства-контроллера по заданному ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Событие удалено", content = @Content(schema = @Schema(implementation = Message.class))),
-            @ApiResponse(responseCode = "400", description = "Событие не существует", content = @Content(schema = @Schema(implementation = Message.class)))
+            @ApiResponse(responseCode = "404", description = "Событие не существует", content = @Content(schema = @Schema(implementation = Message.class))),
+            @ApiResponse(responseCode = "401", description = "Не авторизован", content = @Content(schema = @Schema(implementation = Message.class)))
     })
-    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteEvent(@PathVariable(name = "id") Long id){
         log.info("Delete event");

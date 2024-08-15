@@ -53,7 +53,7 @@ public class SecurityConfig {
                         "/webjars/**", "/v3/**", "/v2/**",
                         "configuration/ui", "configuration/security",
                         "/api/v1/auth", "/api/v1/registration").permitAll()
-                .requestMatchers("api/v1/events", "api/v1/event-types", "api/v1/controllers", "api/v1/health").permitAll()
+                .requestMatchers("api/v1/events", "api/v1/event-types", "api/v1/controllers", "api/v1/health", "api/v1/statistics").permitAll()
                 .requestMatchers(HttpMethod.POST, "api/v1/events").permitAll()
                 .anyRequest().authenticated()
                 .and()

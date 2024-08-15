@@ -36,8 +36,7 @@ public class AuthResource {
     })
     @PostMapping("/auth")
     public ResponseEntity<?> createAuthToken(@RequestBody JwtRequest authRequest) {
-        log.info("Handling POST request for /api/auth");
-        log.info("Logging in");
+        log.info("Auth request");
         return authService.createAuthToken(authRequest);
     }
     @Operation(summary = "The user enters the nickname, email, password and password again, and after successful entry creates an account", tags = "Registration")
@@ -47,15 +46,13 @@ public class AuthResource {
     })
     @PostMapping("/registration")
     public ResponseEntity<?> createNewUser(@RequestBody User user) {
-        log.info("Handling POST request for /api/registration");
-        log.info("Registering");
+        log.info("Register request");
         return authService.createNewUser(user);
     }
     @Operation(summary = "Exiting the session", tags = "Logout")
     @PostMapping("/logout")
     public ResponseEntity<?> logout() {
-        log.info("Handling POST request for /api/logout");
-        log.info("Clearing current session");
+        log.info("Logout request");
         return ResponseEntity.ok().build();
     }
 }

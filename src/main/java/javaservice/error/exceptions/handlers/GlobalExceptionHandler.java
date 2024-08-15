@@ -34,4 +34,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<?> handleInvalidEventTimeException(InvalidEventTimeException ex){
         return ResponseEntity.badRequest().body(new Message(HttpStatus.BAD_REQUEST.value(), ex.getMessage()));
     }
+    @ExceptionHandler(IncorrectLoginOrPasswordException.class)
+    public ResponseEntity<?> handleIncorrectLoginOrPasswordException(IncorrectLoginOrPasswordException ex){
+        return ResponseEntity.badRequest().body(new Message(HttpStatus.UNAUTHORIZED.value(), ex.getMessage()));
+    }
 }

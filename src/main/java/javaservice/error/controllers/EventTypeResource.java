@@ -101,9 +101,9 @@ public class EventTypeResource {
     @Operation(summary = "Создать новый тип события", description = "Добавляет новый тип события устройства-контроллера в систему")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Тип события создан", content = @Content(schema = @Schema(implementation = EventType.class))),
-            @ApiResponse(responseCode = "400", description = "Тип события уже существует", content = @Content(schema = @Schema(implementation = Message.class)))
+            @ApiResponse(responseCode = "400", description = "Тип события уже существует", content = @Content(schema = @Schema(implementation = Message.class))),
+            @ApiResponse(responseCode = "401", description = "Не авторизован", content = @Content(schema = @Schema(implementation = Message.class)))
     })
-    @PreAuthorize("isAuthenticated()")
     @PostMapping("")
     public EventType createEventType(@RequestBody EventType eventType){
         log.info("Create new event types");
@@ -112,9 +112,9 @@ public class EventTypeResource {
     @Operation(summary = "Обновить существующий тип события", description = "Обновляет тип события устройства-контроллера")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Тип события обновлено", content = @Content(schema = @Schema(implementation = EventType.class))),
-            @ApiResponse(responseCode = "400", description = "Тип события не существует", content = @Content(schema = @Schema(implementation = Message.class)))
+            @ApiResponse(responseCode = "404", description = "Тип события не существует", content = @Content(schema = @Schema(implementation = Message.class))),
+            @ApiResponse(responseCode = "401", description = "Не авторизован", content = @Content(schema = @Schema(implementation = Message.class)))
     })
-    @PreAuthorize("isAuthenticated()")
     @PutMapping("/{id}")
     public EventType updateEventType(@RequestBody EventType eventType, @PathVariable Long id){
         log.info("Update event type");
@@ -124,9 +124,9 @@ public class EventTypeResource {
     @Operation(summary = "Удалить тип события по ID", description = "Удаляет тип события устройства-контроллера по заданному ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Тип события удалено", content = @Content(schema = @Schema(implementation = Message.class))),
-            @ApiResponse(responseCode = "400", description = "Тип события не существует", content = @Content(schema = @Schema(implementation = Message.class)))
+            @ApiResponse(responseCode = "404", description = "Тип события не существует", content = @Content(schema = @Schema(implementation = Message.class))),
+            @ApiResponse(responseCode = "401", description = "Не авторизован", content = @Content(schema = @Schema(implementation = Message.class)))
     })
-    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteEventType(@PathVariable(name = "id") Long id){
         log.info("Delete event type");
