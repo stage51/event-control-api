@@ -34,8 +34,6 @@ import java.util.Optional;
 @RequestMapping("/api/v1/events")
 @Tag(name = "Event", description = "Работа с событиями устройств-контроллеров")
 public class EventResource {
-
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
     private EventService eventService;
 
     public EventResource(EventService eventService) {
@@ -53,20 +51,15 @@ public class EventResource {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String sortBy,
-            @RequestParam(defaultValue = "") String contains
+            @RequestParam(defaultValue = "") String eventTypeComment,
+            @RequestParam(defaultValue = "") String controllerSerialNumber,
+            @RequestParam(defaultValue = "") String comment,
+            @RequestParam(defaultValue = "") String controllerVehicleNumber,
+            @RequestParam(defaultValue = "") String startDate,
+            @RequestParam(defaultValue = "") String endDate
     ) {
         log.info("Get all events");
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "eventTime"));
-        if (sortBy != null && !sortBy.isEmpty()) {
-            String[] sortParams = sortBy.split(",");
-            String direction = sortParams[1];
-            if (direction.equals("asc")) {
-                pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, sortParams[0]));
-            } else {
-                pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortParams[0]));
-            }
-        }
-        return eventService.getAllEvents(pageable, contains);
+        return eventService.getAllEvents(page, size, sortBy, eventTypeComment, controllerSerialNumber, comment, controllerVehicleNumber, startDate, endDate);
     }
     @Operation(summary = "Получить событие по ID", description = "Возвращает событие устройства-контроллера по заданному ID")
     @ApiResponses(value = {
@@ -130,12 +123,10 @@ public class EventResource {
     @ApiResponse(responseCode = "200", description = "Успешное выполнение", content = @Content(schema = @Schema(implementation = List.class)))
     @GetMapping("/statistics")
     public List<Event> getStatistics(
-            @RequestParam("start") String start,
-            @RequestParam("end") String end) {
+            @RequestParam("startDate") String start,
+            @RequestParam("endDate") String end) {
         log.info("Get statistics");
-        LocalDateTime startDateTime = LocalDateTime.parse(start, DATE_TIME_FORMATTER);
-        LocalDateTime endDateTime = LocalDateTime.parse(end, DATE_TIME_FORMATTER);
-        return eventService.getEventsBetween(startDateTime, endDateTime);
+        return eventService.getEventsBetween(start, end);
     }
 
 }

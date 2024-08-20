@@ -12,9 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -22,6 +24,8 @@ import java.util.UUID;
 @Slf4j
 @Service
 public class EventServiceImpl implements EventService {
+
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
     private EventMapper eventMapper;
 
@@ -94,18 +98,40 @@ public class EventServiceImpl implements EventService {
     public Page<Event> readPage(int number) {
         return eventRepository.findAll(PageRequest.of(number, PAGE_SIZE));
     }
-    @Override
-    public Page<Event> getAllEvents(Pageable pageable, String contains) {
-        if (contains.isEmpty() || contains.equals("")){
-            return eventRepository.findAll(pageable);
-        } else{
-            return eventRepository.findByOrEventTypeCommentContainsOrControllerSerialNumberContainsOrCommentContains(
-                    pageable, contains, contains, contains);
+    public Page<Event> getAllEvents(int page, int size, String sortBy,
+                                    String eventTypeComment, String controllerSerialNumber,
+                                    String comment, String controllerVehicleNumber,
+                                    String startDate, String endDate) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "eventTime"));
+
+        if (sortBy != null && !sortBy.isEmpty()) {
+            String[] sortParams = sortBy.split(",");
+            String field = sortParams[0];
+            String direction = sortParams[1];
+            Sort sort = direction.equalsIgnoreCase("asc") ? Sort.by(Sort.Direction.ASC, field) : Sort.by(Sort.Direction.DESC, field);
+            pageable = PageRequest.of(page, size, sort);
         }
+
+        if (startDate == null || startDate.isBlank()) {
+            startDate = LocalDateTime.of(1970, 1, 1, 0, 0).format(DateTimeFormatter.ISO_DATE_TIME);
+        }
+        if (endDate == null || endDate.isBlank()) {
+            endDate = LocalDateTime.of(9999, 12, 31, 23, 59).format(DateTimeFormatter.ISO_DATE_TIME);
+        }
+
+        LocalDateTime startDateTime = LocalDateTime.parse(startDate, DateTimeFormatter.ISO_DATE_TIME);
+        LocalDateTime endDateTime = LocalDateTime.parse(endDate, DateTimeFormatter.ISO_DATE_TIME);
+
+        return eventRepository.findByEventTypeCommentContainsAndControllerSerialNumberContainsAndCommentContainsAndControllerVehicleNumberContainsAndEventTimeBetween(
+                eventTypeComment, controllerSerialNumber,
+                comment, controllerVehicleNumber, startDateTime,
+                endDateTime, pageable);
     }
 
     @Override
-    public List<Event> getEventsBetween(LocalDateTime start, LocalDateTime end) {
-        return eventRepository.findByEventTimeBetweenOrderByEventTimeAsc(start, end);
+    public List<Event> getEventsBetween(String start, String end) {
+        LocalDateTime startDateTime = LocalDateTime.parse(start, DATE_TIME_FORMATTER);
+        LocalDateTime endDateTime = LocalDateTime.parse(end, DATE_TIME_FORMATTER);
+        return eventRepository.findByEventTimeBetweenOrderByEventTimeAsc(startDateTime, endDateTime);
     }
 }

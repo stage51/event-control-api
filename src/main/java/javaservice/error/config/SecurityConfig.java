@@ -46,6 +46,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .cors().disable()
                 .csrf().disable()
                 .authorizeRequests()
                 .requestMatchers(
@@ -53,7 +54,7 @@ public class SecurityConfig {
                         "/webjars/**", "/v3/**", "/v2/**",
                         "configuration/ui", "configuration/security",
                         "/api/v1/auth", "/api/v1/registration").permitAll()
-                .requestMatchers("api/v1/events", "api/v1/event-types", "api/v1/controllers", "api/v1/health", "api/v1/statistics").permitAll()
+                .requestMatchers("api/v1/events", "api/v1/event-types", "api/v1/controllers", "api/v1/health", "api/v1/events/statistics").permitAll()
                 .requestMatchers(HttpMethod.POST, "api/v1/events").permitAll()
                 .anyRequest().authenticated()
                 .and()

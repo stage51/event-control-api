@@ -21,5 +21,11 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     Page<Event> findByOrEventTypeCommentContainsOrControllerSerialNumberContainsOrCommentContains(
             Pageable pageable, String eventTypeCommentContains,
             String controllerSerialNumberContains, String commentContains);
+    Page<Event> findByEventTypeCommentContainsAndControllerSerialNumberContainsAndCommentContainsAndControllerVehicleNumberContainsAndEventTimeBetween(
+            String eventTypeComment, String controllerSerialNumber,
+            String comment, String controllerVehicleNumber,
+            LocalDateTime startDateTime, LocalDateTime endDateTime,
+            Pageable pageable);
+
     List<Event> findByEventTimeBetweenOrderByEventTimeAsc(LocalDateTime startDateTime, LocalDateTime endDateTime);
 }
